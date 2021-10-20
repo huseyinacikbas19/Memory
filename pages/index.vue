@@ -51,16 +51,16 @@
       </template>
 
       <div v-if="!showAddButton" class="flex w-1/2">
-        <div class="btn-blue" @click="updateInfo(true)">
+        <div class="btn-blue hovers" @click="updateInfo(true)">
           Bildim
         </div>
-        <div class="btn-blue" @click="updateInfo(false)">
+        <div class="btn-blue hovers" @click="updateInfo(false)">
           Bilemedim
         </div>
-        <div class="btn-blue" @click="showAreaInfo()">
+        <div class="btn-blue hovers" @click="showAreaInfo()">
           Göster
         </div>
-        <div class="btn-blue" @click="nextInfo()">
+        <div class="btn-blue hovers" @click="nextInfo()">
           Geç
         </div>
       </div>
@@ -193,6 +193,11 @@ export default {
 };
 </script>
 <style scoped>
+.hovers {
+}
+.hovers:hover{
+  cursor: pointer;
+}
 @layer components {
   .btn-blue {
     @apply w-1/2 px-4 py-2 mt-2 ml-12 font-semibold text-blue-700 bg-transparent border border-blue-500 rounded hover:bg-blue-500 hover:text-white hover:border-transparent;
