@@ -70,9 +70,14 @@
 
 <script>
 import axios from "axios";
+import dayjs from "dayjs";
+import "dayjs/locale/tr";
 export default {
   data() {
     return {
+      statuses: 0,
+      statusesDay: 0,
+      statusesMonth: 0,
       label: "Öğren",
       showAreaInformation: false,
       showArea: null,
@@ -82,6 +87,7 @@ export default {
       inputInfo: null,
       areaInfo: null,
       showAddButton: false,
+      hours: [0, 1, 3, 8, 24, 168, 672, 4032],
       buttonNames: [
         "Ekle",
         "Öğrenilecek",
@@ -117,6 +123,20 @@ export default {
     showAreaInfo() {
       this.showAreaInformation = true;
     },
+    formatDate(value, format) {
+      return dayjs(value).format(format);
+    },
+    databaseFormatDateAndHour(value) {
+      return this.formatDate(value, "YYYY-MM-DD HH:mm:ss");
+    },
+    differentDate(val) {
+      const dateVal = new Date(val);
+      this.statusesDay = new Date().getDate() - dateVal.getDate();
+      this.statusesMonth = new Date().getMonth() - dateVal.getMonth();
+      this.statuses = new Date().getHours() - dateVal.getHours();
+      this.statuses =
+        this.statuses + this.statusesDay * 24 + this.statusesMonth * 30 * 24;
+    },
     nextInfo() {
       this.showAreaInformation = false;
 
@@ -131,13 +151,19 @@ export default {
       }
     },
     showInfo(val) {
+      this.nextInformation = [];
       this.count = 0;
       axios
         .post("http://hardworking.test/api/information-show", {
           type: val
         })
         .then(res => {
-          this.nextInformation = res.data;
+          res.data.forEach((element, index) => {
+            this.differentDate(res.data[index].type_date);
+            if (this.statuses >= this.hours[val]) {
+              this.nextInformation.push(res.data[index]);
+            }
+          });
         });
     },
     indexInfo() {
@@ -153,6 +179,8 @@ export default {
           information: this.areaInfo
         })
         .then(res => {});
+      this.inputInfo = null;
+      this.areaInfo = null;
     },
     showAdd(val) {
       if (val === "Ekle") {
