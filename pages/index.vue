@@ -15,7 +15,7 @@
         class="btn-blue"
       >
         {{ item }}
-      </button>
+      </button> 
     </div>
 
     <div class="w-1/2">
