@@ -4,6 +4,7 @@
     <div class="w-1/5">
       <p
         class="w-1/2 px-4 py-2 mt-2 ml-12 font-semibold text-red-500 bg-transparent border border-red-500 rounded "
+        style="    margin-left: 128px;"
       >
         {{ label }}
       </p>
@@ -15,7 +16,7 @@
         class="btn-blue"
       >
         {{ item }}
-      </button> 
+      </button>
     </div>
 
     <div class="w-1/2">
@@ -50,7 +51,7 @@
         </div>
       </template>
 
-      <div v-if="!showAddButton" class="flex w-1/2">
+      <div v-if="!showAddButton" class="flex w-2/3" style="margin-left: -125px">
         <div class="btn-blue hovers" @click="updateInfo(true)">
           Bildim
         </div>
@@ -102,6 +103,9 @@ export default {
       ]
     };
   },
+  created() {
+    this.showLearn();
+  },
   methods: {
     showLabel(val) {
       this.label = this.buttonNames[val];
@@ -139,15 +143,29 @@ export default {
     },
     nextInfo() {
       this.showAreaInformation = false;
-
-      if (this.nextInformation[this.count] == null) {
-        this.showInformation = this.nextInformation[(this.count = 0)].key;
-        this.showArea = this.nextInformation[this.count].information;
-        this.count++;
-      } else {
-        this.showInformation = this.nextInformation[this.count].key;
-        this.showArea = this.nextInformation[this.count].information;
-        this.count++;
+      try {
+        if (this.nextInformation[this.count] == null) {
+          this.showInformation = this.nextInformation[(this.count = 0)].key;
+          this.showArea = this.nextInformation[this.count].information;
+          this.count++;
+        } else {
+          this.showInformation = this.nextInformation[this.count].key;
+          this.showArea = this.nextInformation[this.count].information;
+          this.count++;
+        }
+      } catch (error) {
+        this.showInformation = "Öğrenecek bilgi yok";
+      }
+    },
+    showLearn() {
+      for (let i = 0; i < 8; i++) {
+        axios
+          .post("http://hardworking.test/api/information-show", {
+            type: i
+          })
+          .then(res => {
+//            console.log(res);
+          });
       }
     },
     showInfo(val) {
@@ -195,12 +213,12 @@ export default {
 <style scoped>
 .hovers {
 }
-.hovers:hover{
+.hovers:hover {
   cursor: pointer;
 }
 @layer components {
   .btn-blue {
-    @apply w-1/2 px-4 py-2 mt-2 ml-12 font-semibold text-blue-700 bg-transparent border border-blue-500 rounded hover:bg-blue-500 hover:text-white hover:border-transparent;
+    @apply w-1/2 px-4 py-2 mt-2 ml-32 font-semibold text-blue-700 bg-transparent border border-blue-500 rounded hover:bg-blue-500 hover:text-white hover:border-transparent;
   }
 }
 </style>
