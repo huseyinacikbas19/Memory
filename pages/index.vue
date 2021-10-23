@@ -33,7 +33,7 @@
           class="w-full p-1 m-1 border-2 border-gray-600 border-solid h-3/4"
         ></textarea>
         <div
-          class="btn-blue"
+          class="btn-blue hovers"
           style="width: 120px; margin-left:2px"
           @click="storeInfo()"
         >
@@ -76,6 +76,7 @@ import "dayjs/locale/tr";
 export default {
   data() {
     return {
+      showColor: [false, false, false, false, false, false, false, false],
       statuses: 0,
       statusesDay: 0,
       statusesMonth: 0,
@@ -103,9 +104,7 @@ export default {
       ]
     };
   },
-  created() {
-    this.showLearn();
-  },
+
   methods: {
     showLabel(val) {
       this.label = this.buttonNames[val];
@@ -157,17 +156,7 @@ export default {
         this.showInformation = "Öğrenecek bilgi yok";
       }
     },
-    showLearn() {
-      for (let i = 0; i < 8; i++) {
-        axios
-          .post("http://hardworking.test/api/information-show", {
-            type: i
-          })
-          .then(res => {
-//            console.log(res);
-          });
-      }
-    },
+
     showInfo(val) {
       this.nextInformation = [];
       this.count = 0;
